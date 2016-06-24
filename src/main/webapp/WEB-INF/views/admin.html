@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/security/tags">
+<head>
+<meta charset="utf-8" content="text/plain" />
+<title th:text="#{messages.adminPageTitle}">Admin Page</title>
+
+
+<link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.css}" />
+<script th:src="@{/resources/js/jquery-2.2.3.js}"></script>
+<script th:src="@{/resources/js/bootstrap.js}"></script>
+<script th:src="@{/resources/js/admin.js}"></script>
+
+
+</head>
+
+<body>
+
+
+  <div th:replace="fragments/header :: header">&nbsp;</div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="well well-lg">
+          <div class="panel-body">
+            <p th:align="center" th:text="#{messages.adminMessage}">Welcome to Admin Tools!</p>
+            <div th:switch=${typeError}>
+              <div th:case="0">
+                <div class="alert alert-success" role="alert">
+                  <span class="fa fa-exclamation"></span>
+                  <span th:text="#{messages.noErrorMessage(${title})}">Train not saved!</span>
+                </div>
+              </div>
+              <div th:case="1">
+                <div class="alert alert-danger" role="alert">
+                  <span class="fa fa-exclamation"></span>
+                  <span th:text="#{messages.errorMessage(${title})}">Train not saved!</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade well well-lg" id="modal-addStation">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" type="button" data-dismiss="modal" th:onclick="${'clearTable()'}">
+            <i class="fa fa-times"></i>
+          </button>
+          <h4 th:align="center" class="modal-title" th:text="#{messages.addStationTitle}">Add Station</h4>
+        </div>
+        <div class="modal-body">
+
+          <div th:each="item : ${stationsList}">
+            <span th:text="${item.station}"></span>
+          </div>
+
+          <form th:action="@{/addStation}" th:object="${station}" method="post">
+            <div class="form-group">
+              <input type="text" class="form-control" th:field="*{station}" th:placeholder="#{messages.station}" />
+            </div>
+            <button type="submit" class="btn btn-success btn-sm" th:text="#{messages.addButton}">
+              <i class="fa fa-plus"></i>
+              Add
+            </button>
+          </form>
+
+        </div>
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade well well-lg" id="modal-addUser">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" type="button" data-dismiss="modal">
+            <i class="fa fa-times"></i>
+          </button>
+          <h4 th:align="center" class="modal-title" th:text="#{messages.addUserTitle}">Form</h4>
+
+        </div>
+        <div class="modal-body">
+          <form th:action="@{/addUser}" th:object="${user}" method="post">
+            <div class="form-group">
+              <input type="text" class="form-control" th:field="*{login}" th:placeholder="#{messages.login}" />
+              <input type="password" class="form-control" th:field="*{password}" th:placeholder="#{messages.password}" value="User2" />
+              <input type="text" class="form-control" th:field="*{firstname}" th:placeholder="#{messages.firstname}" />
+              <input type="text" class="form-control" th:field="*{secondname}" th:placeholder="#{messages.secondname}" />
+            </div>
+            <button type="submit" class="btn btn-success btn-sm" th:text="#{messages.addButton}">
+              <i class="fa fa-plus"></i>
+              Add
+            </button>
+          </form>
+        </div>
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade well well-lg" id="modal-addTrain">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" type="button" data-dismiss="modal">
+            <i class="fa fa-times"></i>
+          </button>
+          <h4 th:align="center" class="modal-title" th:text="#{messages.addTrainTitle}">Form</h4>
+
+        </div>
+        <div class="modal-body">
+          <div th:each="item : ${trainList}">
+            <span th:text="${item.number} + ' ' + ${item.model}"></span>
+          </div>
+          <form th:action="@{/addTrain}" th:object="${train}" method="post">
+            <div class="form-group">
+              <input type="text" class="form-control" th:field="*{number}" th:placeholder="#{messages.number}" />
+              <input type="text" class="form-control" th:field="*{model}" th:placeholder="#{messages.model}" />
+              <input type="number" class="form-control" th:field="*{numPlaces}" th:placeholder="#{messages.numPlaces}" />
+            </div>
+            <button type="submit" class="btn btn-success btn-sm" th:text="#{messages.addButton}">
+              <i class="fa fa-plus"></i>
+              Add
+            </button>
+          </form>
+        </div>
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade well well-lg" id="modal-addRoute">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" type="button" data-dismiss="modal">
+            <i class="fa fa-times"></i>
+          </button>
+          <h4 th:align="center" class="modal-title" th:text="#{messages.addRouteTitle}">Form</h4>
+
+        </div>
+        <div class="modal-body">
+          <form id="formAddRoute" th:action="@{/addRoute}" method="post">
+
+            <div class="row">
+              <div id="error"></div>
+              <div class="col-sm-6">
+                <select id="selectTrain" class="form-control">
+                  <option th:each="item : ${trainList}" th:value="${item.trainId}" th:text="${item.number} + ' ' + ${item.model}">Train</option>
+                </select>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <button type="button" id="addStationButton" class="btn btn-success btn-sm">Add</button>
+                  </div>
+                </div>
+
+
+                <div id="stationDiv"></div>
+
+              </div>
+            </div>
+
+            <button type="button" id="addRouteButton" class="btn btn-success btn-sm" th:text="#{messages.addButton}">
+              <i class="fa fa-plus"></i>
+              Add
+            </button>
+          </form>
+        </div>
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="modal fade well well-lg" id="modal-addSchedule">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" type="button" data-dismiss="modal">
+            <i class="fa fa-times"></i>
+          </button>
+          <h4 th:align="center" class="modal-title" th:text="#{messages.addScheduleTitle}">Form</h4>
+
+        </div>
+        <div class="modal-body">
+          <form id="formAddRoute" th:action="@{/addSchedule}" method="post">
+
+            <div class="row">
+              <div id="error"></div>
+              <div class="col-xs-12">
+                <select name="selectRoute" class="form-control">
+                  <option th:each="item : ${routeList}" th:value="${item.routeId}" th:text="${item.routeId} + ' ' + ${item.train.number} + ' ' + ${item.train.model} + ' ' +${item.shortName}">Train</option>
+                </select>
+                <span>Select Day:</span>
+                <select name="selectDay" class="form-control">
+                  <option th:value="MONDAY" th:text="#{messages.selectDayMonday}">Monday</option>
+                  <option th:value="TUESDAY" th:text="#{messages.selectDayTuesday}">Tuesday</option>
+                  <option th:value="WEDNESDAY" th:text="#{messages.selectDayWednesday}">Wednesday</option>
+                  <option th:value="THURSDAY" th:text="#{messages.selectDayThursday}">Thursday</option>
+                  <option th:value="FRIDAY" th:text="#{messages.selectDayFriday}">Friday</option>
+                  <option th:value="SATURDAY" th:text="#{messages.selectDaySaturday}">Saturday</option>
+                  <option th:value="SUNDAY" th:text="#{messages.selectDaySunday}">Sunday</option>
+                </select>
+                <span>Start:</span><input name="startTime" type="time" class="form-control" value="00:00"/>
+                <span>Finish:</span><input name="finishTime" type="time" class="form-control" value="00:00"/>
+                <span>Cost:</span><input name="cost" type="number" class="form-control" step="0.01"/>
+                
+
+            </div>
+            </div>
+
+            <button type="submit" id="addScheduleButton" class="btn btn-success btn-sm" th:text="#{messages.addButton}">
+              <i class="fa fa-plus"></i>
+              Add
+            </button>
+          </form>
+        </div>
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+  
+ 
+
+  <script th:inline="javascript"> 
+        var stationList = [[${stationsList}]]; 
+  </script>
+</body>
+</html>

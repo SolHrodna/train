@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8"/>
+<title th:text="#{messages.signintitle}">Login Page</title>
+
+
+
+<link rel="stylesheet" type="text/css"
+	th:href="@{/resources/css/bootstrap.css}" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/resources/css/font-awesome.css}" />
+
+<script th:src="@{/resources/js/jquery-2.2.3.js}"></script>
+<script th:src="@{/resources/js/bootstrap.js}"></script>
+
+
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+        <div class="col-md-6 col-md-offset-3">
+        
+            <form th:action="@{/j_spring_security_check}" method="post" class="well well-lg">
+				<p th:align="center" class="form-signin-heading"
+						th:text="#{messages.signin}">Please, sign in</p>
+				
+				<div th:if="${param.error != null}">
+					<div class="alert alert-danger" role="alert">
+  						<span class="fa fa-exclamation"></span>
+  						<span th:text="#{messages.errorsignin}">Wrong login or password</span>
+					</div>
+				</div>
+				
+				<div class="form-group">
+				
+					<div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+					    <input type="text" name="username" class="form-control" th:placeholder="#{messages.login}" />     
+					</div>
+					<div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-suitcase"></i></span>
+					    <input type="password" name="password" class="form-control" th:placeholder="#{messages.password}" />    
+					</div>
+					 
+				</div> 
+				<div class="btn-group">
+					<button type="submit"
+	                        class="btn btn-primary btn-sm" th:text="#{messages.signinbutton}"><i class="fa fa-user"></i>&nbsp;Sign In</button>
+	                <button type="button"
+	                        class="btn btn-primary btn-sm" th:text="#{messages.registrationbutton}" data-toggle="modal" data-target="#modal-reg">Registration&nbsp;<i class="fa fa-user-plus"></i></button>
+                </div>        
+			</form>
+
+        
+        </div>
+        </div>
+	</div>
+	
+	<div class="modal fade well well-lg" id="modal-reg">
+	    <div class="modal-dialog modal-sm">
+	        <div class="modal-content">
+	            <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal">
+                        <i class="fa fa-times"></i>
+                    </button>
+                    <h4 th:align="center" class="modal-title" th:text="#{messages.registrationform}">Registration Form</h4>
+	                
+	            </div>
+	            <div class="modal-body">
+	                <form th:action="@{/registrationUser}" th:object="${user}" method="post">
+                        <div class="form-group">
+                            <input type="text" class="form-control" th:field="*{login}" th:placeholder="#{messages.login}"/>
+                            <input type="password" class="form-control" th:field="*{password}" th:placeholder="#{messages.password}" value="User2"/>
+                            <input type="text" class="form-control" th:field="*{firstname}" th:placeholder="#{messages.firstname}"/>
+                            <input type="text" class="form-control" th:field="*{secondname}" th:placeholder="#{messages.secondname}"/>
+                        </div>
+	                    <button type="submit" class="btn btn-success btn-sm" th:text="#{messages.registrationbutton}"><i class="fa fa-plus"></i>Registration</button>
+	                </form>
+	            </div>
+	            <div class="modal-footer">
+	                
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	
+	
+	
+	
+	
+</body>
+</html>

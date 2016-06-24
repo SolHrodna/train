@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.springframework.org/security/tags">
+<head>
+<meta charset="utf-8" content="text/plain"/>
+<title th:text="#{messages.mainPageTitle}">Main Page</title>
+
+
+<link rel="stylesheet" type="text/css"
+	th:href="@{/resources/css/bootstrap.css}" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/resources/css/font-awesome.css}" />
+<script th:src="@{/resources/js/jquery-2.2.3.js}"></script>
+<script th:src="@{/resources/js/bootstrap.js}"></script>
+	
+
+
+</head>
+
+<body>
+
+	
+	
+	<nav th:replace="fragments/header :: header">&nbsp;</nav>
+	
+	
+	<div class="container">
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3">
+					<div class="well well-lg">
+						<div class="panel-body">
+							<form th:action="@{/find}" method="post">
+								<div th:if="${stationsList != null}">
+									<input id="dateInput" type="date" class="form-control" name="selectDate">
+								</div>
+								<div th:if="${stationsList != null}">
+									<select name="selectFrom" class="form-control"
+										data-live-search="true">
+										<option th:each="item : ${stationsList}"
+											th:value="${item.station}" th:text="${item.station}">Station</option>
+									</select>
+								</div>
+
+								<div th:if="${stationsList != null}" >
+									<select name="selectTo" class="form-control"
+										data-live-search="true">
+										<option th:each="item : ${stationsList}"
+											th:value="${item.station}" th:text="${item.station}">Station</option>
+									</select>
+								</div>
+
+
+
+								<button type="submit" class="btn btn-primary btn-sm" th:text="#{messages.searchRoutesButton}">Search</button>
+							</form>
+
+							<div id="result"></div>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		
+
+
+
+
+	
+<script > 
+window.onload = function(){
+
+	    
+	    var now = new Date();
+	   	minDate = now.toISOString().substring(0,10);
+		month = now.getMonth() + 1;
+		year = now.getFullYear();
+		day = now.getDate();
+		
+		month = month + 1;
+		
+		if(month < 10)
+	        month = '0' + month.toString();
+	    if(day < 10)
+	        day = '0' + day.toString();
+	    
+	    maxDate = year + '-' + month + '-' + day;  
+	    
+	    $('#dateInput').prop('min', minDate);
+	    $('#dateInput').prop('max', maxDate);
+	    
+}
+</script>
+
+
+	
+</body>
+</html>

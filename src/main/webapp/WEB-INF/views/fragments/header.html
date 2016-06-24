@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link rel="stylesheet" type="text/css"
+	th:href="@{/resources/css/bootstrap.css}" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/resources/css/font-awesome.css}" />
+
+</head>
+<body>
+
+	<nav class="navbar navbar-light navbar-static-top" role="navigation"
+		th:fragment="header">
+		<div class="container">
+
+			<a class="navbar-brand" th:href="@{/main}">MyTrain</a>
+
+			<div>
+				<ul class="nav navbar-nav" sec:authorize="hasRole('ROLE_USER')">
+				
+					<li><a th:href="@{/history}" th:text="#{messages.myhistory}">My History</a>
+					</li>
+				
+					<li><a th:href="@{/orderPage}" th:text="#{messages.myorders}">My Orders</a></li>
+					<li><a th:href="@{/schedulePage}" th:text="#{messages.schedule}">Schedule</a></li>
+				</ul>
+
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown"><span
+							th:text="${currentLoginUser.login}">User</span> <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a th:href="@{/j_spring_security_logout}"> <i
+									class="fa fa-power-off" th:text="#{messages.logout}"></i></a></li>
+						</ul></li>
+				</ul>
+
+				<ul class="nav navbar-nav navbar-right"
+					sec:authorize="hasRole('ROLE_ADMIN')">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown"><span th:text="#{messages.admintools}">Admin's
+								Tools</span> <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a data-toggle="modal" th:href="@{#modal-addStation}" th:text="#{messages.addStationTitle}">Add Station</a></li>
+							<li><a data-toggle="modal" th:href="@{#modal-addUser}" th:text="#{messages.addUserTitle}">Add User</a></li>
+							<li><a data-toggle="modal" th:href="@{#modal-addTrain}" th:text="#{messages.addTrainTitle}">Add Train</a></li>
+							<li><a data-toggle="modal" th:href="@{#modal-addRoute}" th:text="#{messages.addRouteTitle}">Add Route</a></li>
+                            <li><a data-toggle="modal" th:href="@{#modal-addSchedule}" th:text="#{messages.addScheduleTitle}">Add Route</a></li>
+						</ul></li>
+				</ul>
+
+
+			</div>
+
+
+
+		</div>
+	</nav>
+
+</body>
+</html>
